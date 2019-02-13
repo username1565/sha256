@@ -1,4 +1,5 @@
 <html>
+	<meta charset="utf-8">
 	<head>
 		<title>JavaScript SHA256 demo</title>
 		<style>
@@ -52,22 +53,39 @@
 
 			<p>This is a JavaScript implementation of SHA-256, aiming to be as small as I can make it.  The goals are:</p>
 			<ul>
-				<li>small size- the minified version is <a href="sha256.min.js">less than a kilobyte</a></li>
+				<li>small size- the minified version is <a href="sha256.min.js">less than a kilobyte (852 bytes)</a></li>
 				<li>readability - the unminified version should be relatively easy to understand
 			</ul>
-			<p>It currently only supports ASCII, so if you need to hash Unicode text you'll need to write a decoder.</p>
+			<p>It currently only supports ASCII, so if you need to hash Unicode text you'll need to write a decoder,<br>
+			<a href="sha256_utf8.html">or use this UTF-8 script</a>.</p>
 			
 			<script src="sha256.min.js"></script>
-			<textarea id="input" rows=5>abc</textarea>
+			<div id="description">Unicode (UTF-8) not allowed. Only ascii. Using default script <a href="sha256.min.js">sha256.min.js</a>:</div>
+			<textarea id="input" rows=5 title="For 'abc' hash must be
+ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad">abc</textarea>
 			<input id="button" type="button" value="calculate" />
+			<div class="check_box"><label><input name="upper_case" id="upper_case" onclick="change_case();" type="checkbox">UpperCase</label></div>
 			<textarea id="output" rows=1 style="text-align: center"></textarea>
 
 			<script>
-				document.getElementById('button').onclick = function () {
-					document.getElementById('output').value = sha256(document.getElementById('input').value);
-				};
+				function change_case(){
+					document.getElementById('output').value =
+						(document.getElementById('upper_case').checked)
+							? document.getElementById('output').value.toUpperCase()
+							: document.getElementById('output').value.toLowerCase()
+					;
+				}
+				var update =
+				document.getElementById('button').onclick =	//on click button
+				document.getElementById('input').oninput =	//or oninput value
+					function () {	//run this function
+						document.getElementById('output').value = sha256(document.getElementById('input').value);	//add value to ouput element.
+						change_case();
+					};
+				update(); //run this function on first load page.
 			</script>
 			
+			<div id="ascii">Source code <a href="sha256.js">sha256.js</a> (only ASCII):</div>
 			<pre><code>var sha256 = function sha256(ascii) {
 	function rightRotate(value, amount) {
 		return (value>>>amount) | (value&lt;&lt;(32 - amount));

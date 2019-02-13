@@ -1,4 +1,4 @@
-var sha256 = function sha256(ascii) {
+﻿var sha256 = function sha256(ascii) {
 	function rightRotate(value, amount) {
 		return (value>>>amount) | (value<<(32 - amount));
 	};
